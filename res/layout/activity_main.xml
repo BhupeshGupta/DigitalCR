@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:onClick="true"
+    android:visibility="visible"
+    tools:context=".MainActivity" >
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="text" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/editText1"
+        android:layout_toRightOf="@+id/editText1" 
+        android:text="@string/search"
+        android:textStyle="italic"
+        android:id="@+id/search_button"
+        android:textSize="10sp"/>
+
+
+</RelativeLayout>
