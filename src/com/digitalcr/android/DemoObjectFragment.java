@@ -1,11 +1,7 @@
-package com.example.project_facebook;
+package com.digitalcr.android;
 
+import java.sql.Date;
 
-import java.util.ArrayList;
-import java.util.zip.Inflater;
-
-
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 
@@ -26,9 +22,9 @@ import android.widget.ListView;
 
 public class DemoObjectFragment extends Fragment {
 
-FragmentManager fragmentManager=getFragmentManager();
 
-android.app.FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+
+
 @Override
 	  public View onCreateView(LayoutInflater inflater, ViewGroup container,
               Bundle savedInstanceState) {
@@ -38,23 +34,32 @@ return inflater.inflate(R.layout.fragment_schedule, container, false);
 
 }
 
+public static android.support.v4.app.Fragment newInstance(
+		Context applicationContext) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
 }
 
 class TitlesFragment extends ListFragment{
 
 
-    private static final int resource = 0;
+  
 	private static final int textViewResourceId = 0;
-
+	TitlesFragment[] objects=null;
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         // Populate list with our static array of titles.
-   Titles[] titles=new Titles[]{};
+@SuppressWarnings("unused")
+Titles[] titles=new Titles[]
+		{new Titles(R.drawable.images,""),
+		new Titles(R.drawable.images,"")};
    	Fragment listView=getFragmentManager().findFragmentById(R.layout.schedule_list);
- TitlesAdapter titlesAdapter=new TitlesAdapter(Context context, int resource, int textViewResourceId,
-			TitlesFragment[] objects, int layoutResourceId);
+TitlesAdapter titlesAdapter=new TitlesAdapter(getActivity(),  R.layout.list_fragment, textViewResourceId,
+		titles) ;
   ((ListFragment) listView).setListAdapter(titlesAdapter); }       
 
 	@Override
@@ -70,35 +75,35 @@ class TitlesFragment extends ListFragment{
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
-	
+		FragmentManager fragmentManager=getFragmentManager();
+		android.app.FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+
 	}
 
 }
 class TitlesAdapter extends ArrayAdapter<TitlesFragment>{
-	private static final Titles[] myobject = null;
+	private static Titles[] myobject = null;
 
 
 	Context context;
 	
 
 	private LayoutInflater inflater = null;
-	int layoutResourceId;
+
 
 
 	public TitlesAdapter(Context context, int resource, int textViewResourceId,
-			TitlesFragment[] objects, int layoutResourceId) {
-		super(context, resource, textViewResourceId, objects);
-		this.layoutResourceId = layoutResourceId;
+			Titles[] myobject) {
+		super(context, resource, textViewResourceId);
+		
 		this.context = context;
 		
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.myobject=myobject;
 
 		// TODO Auto-generated constructor stub
 	}
-
-
-
 
 	@SuppressWarnings("unused")
 	@Override
@@ -111,7 +116,7 @@ TitlesHolder holder=null;
 if(convertView== null){
 
 
-	view = inflater.inflate(layoutResourceId, parent, false);
+	view = inflater.inflate(R.layout.list_fragment, parent, false);
 	holder =  new 	TitlesHolder();
 	holder.imageView = (ImageView) view.findViewWithTag(R.id.announce);
 	holder.editText=(EditText) view.findViewById(R.id.notice);
@@ -123,6 +128,7 @@ Titles titles = myobject[position];
 for(position=0;position<=myobject.length;position++){
 holder.imageView.setImageResource(R.id.announce);
 holder.editText.setText(R.id.notice, null);
+
 }
 
 
@@ -135,4 +141,5 @@ holder.editText.setText(R.id.notice, null);
 class TitlesHolder{
 	ImageView imageView;
 	EditText editText;
+	
 }
