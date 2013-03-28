@@ -1,14 +1,17 @@
 package com.digitalcr.android;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 
 import com.digitalcr.android.Shout_Fragment.DetailsFragment;
 
 
     class DetailsActivity extends Activity {
-    	  DetailsFragment details = new DetailsFragment();
+    
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -23,9 +26,12 @@ import com.digitalcr.android.Shout_Fragment.DetailsFragment;
 
             if (savedInstanceState == null) {
                 // During initial setup, plug in the details fragment.
-              
-                details.setArguments(getIntent().getExtras());
-                getFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
+          	 
+          	 Intent intent=new Intent(getApplicationContext(),DetailsFragment.class);
+          	 
+          	 startActivity(intent);
+          	 
+          	  
             }
         }
     }

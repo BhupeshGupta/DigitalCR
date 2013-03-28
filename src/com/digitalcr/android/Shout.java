@@ -3,24 +3,30 @@ package com.digitalcr.android;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.Inflater;
 
+import com.digitalcr.android.DemoObjectFragment.ViewFragment;
 import com.digitalcr.android.MainActivity.Pager_Adapter;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.ListFragment;
+
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.FeatureInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.CursorAdapter;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -35,12 +41,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 
-class Shout extends FragmentActivity{
+class Shout extends Fragment{
 private static final FragmentManager fm = null;
 
 
 	Shout_Fragment shout_Fragment=new Shout_Fragment();
-}
+	
+
+	}
+
+
 
 
 	
@@ -49,18 +59,21 @@ private static final FragmentManager fm = null;
 class Shout_Fragment extends ListFragment{
 	ViewPager viewPager1=new ViewPager(getActivity());
 	// TODO Auto-generated constructor stub
-
+DetailsFragment detailsFragment=new DetailsFragment();
 	 boolean mDualPane;
 	    static int mCurCheckPosition = 0;
-	
-public Shout_Fragment newInstance(){
-	Shout_Fragment shout_Fragment=new Shout_Fragment();
-	Bundle args=new Bundle();
-	args.putInt("shout", 1);
-	shout_Fragment.setArguments(args);
-	
-	return shout_Fragment;
-	}
+
+
+		public static Fragment newInstance(
+				Context applicationContext) {
+			
+			Shout_Fragment shout_Fragment=new Shout_Fragment();
+			// TODO Auto-generated method stub
+			
+			
+			return shout_Fragment;}
+
+
 	    @Override
 	    public void onActivityCreated(Bundle savedInstanceState) {
 	        super.onActivityCreated(savedInstanceState);
@@ -72,8 +85,8 @@ public Shout_Fragment newInstance(){
 	        		{new Titles(R.drawable.images,""),
 	        		new Titles(R.drawable.images,"")};
 	       
-	           	Fragment listView=getFragmentManager().findFragmentById(R.layout.list_fragment);	
-	           	TitlesAdapter titlesAdapter=new TitlesAdapter(getActivity(), R.layout.schedule_list, titles);
+	          Shout_Fragment listView=(Shout_Fragment) getFragmentManager().findFragmentById(R.layout.list_fragment);	
+	           	TitlesAdapter titlesAdapter=new TitlesAdapter(getActivity(), R.layout.shout_list, titles);
 	        setListAdapter(titlesAdapter);
 	             
 
@@ -105,15 +118,13 @@ public Shout_Fragment newInstance(){
 	    @Override
 	    public void onListItemClick(ListView l, View v, int position, long id) {
 	        showDetails(position);
-	        
-	        DetailsFragment.newInstance(position);
-	        setPager();
+	   Intent intent=new Intent(getActivity(),ViewFragment.class);
+	   
+	        intent.putExtra(getTag(), getArguments());
+	        startActivity(intent);
 	    }
 
-	    private void setPager() {
-			// TODO Auto-generated method stub
-	   
-		}
+  
 		/**
 	     * Helper function to show the details of a selected item, either by
 	     * displaying a fragment in-place in the current UI, or starting a
@@ -128,14 +139,14 @@ public Shout_Fragment newInstance(){
 	            getListView().setItemChecked(index, true);
 
 	            // Check what fragment is currently shown, replace if needed.
-	            DetailsFragment details =getFragmentManager().beginTransaction().add(arg0, arg1).commit();
-	            if (details == null || details.getShownIndex() != index) {
+	 DetailsFragment details=(DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
+	            if (details == null ) {
 	                // Make new fragment to show this selection.
 	             details = DetailsFragment.newInstance(index);
 
 	                // Execute a transaction, replacing any existing fragment
 	                // with this one inside the frame.
-	                android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+	                FragmentTransaction ft = getFragmentManager().beginTransaction();
 	                if (index == 0) {
 	                    ft.replace(R.id.details, details);
 	              
@@ -218,65 +229,82 @@ public Shout_Fragment newInstance(){
 
 
 
-static class DetailsFragment extends Fragment {
-    /**
+static class DetailsFragment extends Fragment{
+	
+    static DetailsFragment f = new DetailsFragment();
+    public static int z=0;
+	   static Bundle args = new Bundle();
+	
+	@Override
+ 
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+    	Shout_data shout_data=new Shout_data(getActivity());
+		f=(DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
+
+		ShoutCursorAdapter shoutCursorAdapter=new ShoutCursorAdapter(getActivity(),shout_data.getdata(), R.layout.schedule_list);
+   
+	String x = null;
+	int columns=0;
+	
+	int y=0;
+	while(shoutCursorAdapter.getCursor().getColumnName(y) != null){
+		
+	Intent intent=new Intent(getActivity(),CrossFadeAnimation.class);
+	intent.putExtra(shoutCursorAdapter.getCursor().getColumnName(getId()),z);
+		startActivity(intent);
+	}
+	y++;
+	
+	
+	shoutCursorAdapter.getCursor().getColumnNames().equals(x);
+	
+	
+
+	
+	}
+
+
+
+	/**
      * Create a new instance of DetailsFragment, initialized to
      * show the text at 'index'.
      */
     public  static DetailsFragment newInstance(int index) {
-        DetailsFragment f = new DetailsFragment();
+    
 
         // Supply index input as an argument.
-        Bundle args = new Bundle();
-        args.putInt("index", index);
+       
+        args.putInt("", index);
         f.setArguments(args);
 
         return f;
     }
-
-    public int getShownIndex() {
-        return getArguments().getInt("index", 0);
-    }
+   
+    
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        if (container == null) {
-            // We have different layouts, and in one of them this
-            // fragment's containing frame doesn't exist.  The fragment
-            // may still be created from its saved state, but there is
-            // no reason to try to create its view hierarchy because it
-            // won't be displayed.  Note this is not needed -- we could
-            // just run the code below, where we would create and return
-            // the view hierarchy; it would just never be used.
-            return null;
+    	
+    	
+  
+				return container;
+        
         }
 
-        ScrollView scroller = new ScrollView(getActivity());
-        TextView text = new TextView(getActivity());
-        int padding = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                4, getActivity().getResources().getDisplayMetrics());
-        text.setPadding(padding, padding, mCurCheckPosition, padding);
-        scroller.addView(text);
-        text.setText(Shakespeare.DIALOGUE[getShownIndex()]);
-        return scroller;
-        
-    }
- 
+       
 }
-
-
-
-public static android.support.v4.app.Fragment newInstance(
-		Context applicationContext) {
-	// TODO Auto-generated method stub
-	return null;
-}
+    
+} 
 
 
 
 
-}
+
+
+
 
 
 
